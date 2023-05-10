@@ -1,0 +1,21 @@
+ wget http://jyywiki.cn/pages/OS/2022/demos/model-checker.py
+
+ 自旋锁
+ int table = YES;
+
+ void lock(){
+    retry:
+        int got = xchg(&table,NOPE);
+        if (got == NOPE)
+            goto retry;
+        assert(got == YES);
+ }
+
+ void unlock(){
+    xchg(&table,YES);
+ }
+
+ 精简版：
+    int locked = 0;
+    void lock(){while (xchg(&locked,1));}
+    void unlock(){xchg(&locked,0);}
